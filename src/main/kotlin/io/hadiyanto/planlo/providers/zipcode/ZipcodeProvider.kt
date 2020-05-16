@@ -1,6 +1,5 @@
 package io.hadiyanto.planlo.providers.zipcode
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import io.hadiyanto.planlo.entities.Geolocation
 import io.hadiyanto.planlo.entities.Zipcode
 import org.springframework.beans.factory.annotation.Value
@@ -23,17 +22,14 @@ class OpenGeocodingApi(
     return urlFor(this).let { url ->
       restTemplate.getForEntity(url, ReverseGeocode::class.java)
         .let { response ->
-          val reverseGeocode = response.body!!
-
-          Zipcode(reverseGeocode.address!!.zipcode ?: "")
-        } ?: throw RuntimeException("something went wrong")
+          val reverseGeocode = response.body
+            ?: throw ZipcodeNotFound("Cannot find zipcode from lat=${this.latitude} long=${this.longitude}")
+          val zipcode = reverseGeocode.address?.zipcode
+            ?: throw ZipcodeNotFound("Cannot find zipcode from lat=${this.latitude} long=${this.longitude}")
+          Zipcode(zipcode)
+        }
     }
   }
 
   private fun urlFor(geolocation: Geolocation) = "$reverseGeocodeUrl?lat=${geolocation.latitude}&lon=${geolocation.longitude}&format=json"
 }
-
-private data class ReverseGeocode(val address: Address?)
-private data class Address(
-  @JsonProperty("postcode") val zipcode: String?
-)

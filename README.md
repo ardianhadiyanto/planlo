@@ -11,6 +11,15 @@ PlanLo provides an endpoint which takes in as inputs the client's geolocation (l
 3. Find out the temperature range associated with the hardiness zone.
 4. Retrieve all plants that are growable within the temperature range.
 
+Assume that the latitude is 37.452 and longitude is -122.184, a list of growable plants in that
+ area can be retrieved by sending the below request:
+ 
+```
+http://localhost:8080/plants?latitude=37.452&longitude=-122.184
+```
+
 ## Acknowledgements
 PlanLo relies heavily on 3 APIs:
-1. 
+1. [Trefle](https://trefle.io)
+2. [phzmapi](https://phzmapi.org)
+3. [Nominatim OpenStreetMap](https://nominatim.openstreetmap.org)
