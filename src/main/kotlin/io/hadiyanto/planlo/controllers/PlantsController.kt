@@ -20,7 +20,7 @@ class PlantsController(
     return try {
       ResponseEntity(plantsService.getPlantsFor(geolocation), HttpStatus.OK)
     } catch (e: RuntimeException) {
-      throw ResponseStatusException(HttpStatus.NOT_FOUND, "Foo Not Found", e)
+      return ResponseEntity(emptyList(), HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 }
