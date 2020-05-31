@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 interface ZipcodeProvider {
-  fun zipcodeFor(geolocation: Geolocation): Zipcode
+  fun zipcodeFor(geolocation: Geolocation): Zipcode?
 }
 
 @Service
@@ -16,20 +16,12 @@ class OpenGeocodingApi(
 ) : ZipcodeProvider {
   private val restTemplate = RestTemplate()
 
-  override fun zipcodeFor(geolocation: Geolocation) = geolocation.lookupZipcode()
-
-  private fun Geolocation.lookupZipcode(): Zipcode {
-    return urlFor(this).let { url ->
-      restTemplate.getForEntity(url, ReverseGeocode::class.java)
-        .let { response ->
-          val reverseGeocode = response.body
-            ?: throw ZipcodeNotFound("Cannot find zipcode from lat=${this.latitude} long=${this.longitude}")
-          val zipcode = reverseGeocode.address?.zipcode
-            ?: throw ZipcodeNotFound("Cannot find zipcode from lat=${this.latitude} long=${this.longitude}")
-          Zipcode(zipcode)
-        }
-    }
+  override fun zipcodeFor(geolocation: Geolocation): Zipcode? {
+    return restTemplate.getForEntity(urlFor(geolocation), ReverseGeocode::class.java)
+      .let { response -> response.body?.address?.zipcode?.toZipcode() }
   }
 
   private fun urlFor(geolocation: Geolocation) = "$reverseGeocodeUrl?lat=${geolocation.latitude}&lon=${geolocation.longitude}&format=json"
+
+  private fun String.toZipcode() = Zipcode(this)
 }

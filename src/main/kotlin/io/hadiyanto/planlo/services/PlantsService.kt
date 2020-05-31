@@ -15,7 +15,11 @@ class PlantsService(
 ) {
   fun getPlantsFor(geolocation: Geolocation): List<Plant> {
     val zipcode = zipcodeProvider.zipcodeFor(geolocation)
+      ?: return emptyList()
+
     val minTemp = temperatureProvider.minTemperatureFor(zipcode)
+      ?: return emptyList()
+
     return plantProvider.plantsFor(minTemp)
   }
 }

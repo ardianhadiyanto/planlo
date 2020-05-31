@@ -2,9 +2,13 @@ package io.hadiyanto.planlo.entities
 
 class Geolocation(val latitude: Double, val longitude: Double)
 
-class Zipcode(val zip: String)
+class Zipcode(val zip: String) {
+  operator fun invoke() = zip
+}
 
-class TemperatureRange(val range: IntRange)
+class TemperatureRange(val range: IntRange) {
+  operator fun invoke() = range
+}
 
 class Plant(
   val commonName: String,

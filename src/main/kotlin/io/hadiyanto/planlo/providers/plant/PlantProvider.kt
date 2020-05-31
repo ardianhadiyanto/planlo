@@ -11,7 +11,7 @@ interface PlantProvider {
 }
 
 @Service
-class TreflePlantProvider(
+class Trefle(
   @Value("\${plants-provider.url}") private val plantsProviderUrl: String,
   @Value("\${plants-provider.token}") private val token: String
 ) : PlantProvider {

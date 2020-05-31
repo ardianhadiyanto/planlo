@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 interface TemperatureProvider {
-  fun minTemperatureFor(zipcode: Zipcode): TemperatureRange
+  fun minTemperatureFor(zipcode: Zipcode): TemperatureRange?
 }
 
 @Service
@@ -16,17 +16,10 @@ class PhzmApi(
 ) : TemperatureProvider {
   private val restTemplate = RestTemplate()
 
-  override fun minTemperatureFor(zipcode: Zipcode): TemperatureRange {
-    val url = "$temperatureProviderUrl/${zipcode.zip}.json"
-    val response = restTemplate.getForEntity(url, HardinessZone::class.java)
-    val hardinessZone = response.body
-      ?: throw HardinessZoneNotFound()
-    val intRange = hardinessZone.temperatureRange.takeIf { it != null }
-      ?.let { it.toRange() }
-      ?: throw UnknownTemperatureRange()
-
-    return TemperatureRange(intRange)
+  override fun minTemperatureFor(zipcode: Zipcode): TemperatureRange? {
+    return restTemplate.getForEntity("$temperatureProviderUrl/${zipcode.zip}.json", HardinessZone::class.java)
+      .let { response -> response.body?.temperatureRange?.toTemperatureRange() }
   }
 
-  private fun String.toRange() = this.split(" ").let { it[0].toInt()..it[2].toInt() }
+  private fun String.toTemperatureRange() = this.split(" ").let { TemperatureRange(it[0].toInt()..it[2].toInt()) }
 }
