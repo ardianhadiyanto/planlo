@@ -10,9 +10,8 @@ PlanLo provides an endpoint which takes in as inputs the client's zipcode. Based
     the temperature range.
 
 ## Example
-Assuming that you have planlo the zipcode is 94025, a list of growable plants in that area can be retrieved by sending
- the below
- request:
+Assuming that you have planlo running locally on port 8080 and the zipcode is 94025, a list of growable plants in
+ that area can be retrieved by sending the below request:
  
 [http://localhost:8080/plants?zipcode=94025](http://localhost:8080/plants?zipcode=94025)
 
