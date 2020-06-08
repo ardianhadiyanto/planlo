@@ -1,7 +1,5 @@
 package io.hadiyanto.planlo.entities
 
-class Geolocation(val latitude: Double, val longitude: Double)
-
 class Zipcode(val zip: String) {
   operator fun invoke() = zip
 }
