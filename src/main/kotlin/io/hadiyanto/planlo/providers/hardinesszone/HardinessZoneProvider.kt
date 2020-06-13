@@ -1,4 +1,4 @@
-package io.hadiyanto.planlo.providers.temperature
+package io.hadiyanto.planlo.providers.hardinesszone
 
 import io.hadiyanto.planlo.entities.TemperatureRange
 import io.hadiyanto.planlo.entities.Zipcode
@@ -6,18 +6,16 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
-interface TemperatureProvider {
-  fun minTemperatureFor(zipcode: Zipcode): TemperatureRange?
+interface HardinessZoneProvider {
+  fun hardinessZoneFor(zipcode: Zipcode): TemperatureRange?
 }
 
 @Service
 class PhzmApi(
-  @Value("\${temperature-provider.url}") private val temperatureProviderUrl: String
-) : TemperatureProvider {
-  private val restTemplate = RestTemplate()
-
-  override fun minTemperatureFor(zipcode: Zipcode): TemperatureRange? {
-    return restTemplate.getForEntity("$temperatureProviderUrl/${zipcode.zip}.json", HardinessZone::class.java)
+  @Value("\${hardiness-zone-provider.url}") private val temperatureProviderUrl: String
+) : HardinessZoneProvider {
+  override fun hardinessZoneFor(zipcode: Zipcode): TemperatureRange? {
+    return RestTemplate().getForEntity("$temperatureProviderUrl/${zipcode.zip}.json", HardinessZone::class.java)
       .let { response -> response.body?.temperatureRange?.toTemperatureRange() }
   }
 

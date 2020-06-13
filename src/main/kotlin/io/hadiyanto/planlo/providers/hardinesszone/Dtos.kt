@@ -1,4 +1,4 @@
-package io.hadiyanto.planlo.providers.temperature
+package io.hadiyanto.planlo.providers.hardinesszone
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
