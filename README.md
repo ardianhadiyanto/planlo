@@ -6,7 +6,7 @@ PlanLo is an application that was created to address a specific problem most com
 PlanLo provides an endpoint which takes in as inputs the client's zipcode. Based on that information, PlanLo will
  then retrieve the hardiness zone from https://phzmapi.org by passing in the given zipcode. The API will return back
   information about the hardiness zone. One useful information is the temperature range associated with the hardiness
-   zone. Next, PlanLo will make another request to https://trefle.io to retrieve allplants that are growable within
+   zone. Next, PlanLo will make another request to https://trefle.io to retrieve all plants that are growable within
     the temperature range.
 
 ## Example
